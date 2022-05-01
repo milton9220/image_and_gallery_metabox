@@ -53,17 +53,26 @@ class Image_Gallery{
             return $post_id;
         }
         $image_id=isset($_POST['omb_image_id']) ? $_POST['omb_image_id']:'';
-        
         $image_url=isset($_POST['omb_image_url']) ? $_POST['omb_image_url']:'';
+
+        $images_id=isset($_POST['omb_images_id']) ? $_POST['omb_images_id']:'';
+        $images_url=isset($_POST['omb_images_url']) ? $_POST['omb_images_url']:'';
+
         update_post_meta( $post_id, 'omb_image_id', $image_id);
         update_post_meta( $post_id, 'omb_image_url', $image_url);
+
+        update_post_meta( $post_id, 'omb_images_id', $images_id);
+        update_post_meta( $post_id, 'omb_images_url', $images_url);
     }
     public function omb_display_metabox($post){
         wp_nonce_field( 'omb_metabox', 'omb_image_feild' );
         $image_id=esc_attr(get_post_meta( $post->ID, 'omb_image_id',true));
-      
         $image_url=esc_url(get_post_meta( $post->ID, 'omb_image_url',true));
+
+        $images_id=esc_attr(get_post_meta( $post->ID, 'omb_images_id',true));
+        $images_url=esc_url(get_post_meta( $post->ID, 'omb_images_url',true));
         $label=__('Image','metabox');
+        $label2=__('Gallery Image','metabox');
         $metabox= <<<EOD
                  <div>
                     <label>{$label}</label>
@@ -71,6 +80,16 @@ class Image_Gallery{
                     <input type="hidden" name="omb_image_id" id="omb_image_id" value="{$image_id}"/>
                     <input type="hidden" name="omb_image_url" id="omb_image_url" value="{$image_url}"/>
                     <div id="preview_image"></div>
+                 </div>
+        EOD;
+        $metabox .=<<<EOD
+                 <div>
+                    <label>{$label2}</label>
+                    <button id="upload_images">Upload Images</button>
+                    <button id="remove_images">Remove Images</button>
+                    <input type="hidden" name="omb_images_id" id="omb_images_id" value="{$images_id}"/>
+                    <input type="hidden" name="omb_images_url" id="omb_images_url" value="{$images_url}"/>
+                    <div id="preview_images"></div>
                  </div>
         EOD;
         echo $metabox;
